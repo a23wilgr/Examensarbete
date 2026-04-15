@@ -1,7 +1,38 @@
-.venv/
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE / editors
+.vscode/
 .idea/
+*.log
+
+# Python
+.venv/
 __pycache__/
 *.pyc
-*.log
-.env
+
+# Node.js
 node_modules/
+
+# Environment variables
+.env
+
+# Database files
+*.sql
+*.db
+
+# Large datasets (om du inte vill ladda upp dem)
+data/
+datasets/
+
+# XAMPP / server generated files
+xampp/
+cgi-bin/
+
+# Temporary uploads
+uploads/
+tmp/
+
+# OS files
+desktop.ini

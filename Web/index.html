@@ -3,9 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <title>Examensarbete</title>
 </head>
 <body>
-    
+    <h1>Article search</h1>
+
+    <div id="searchBox">
+        <input type="text" id="searchTerm" placeholder="Search...">
+        <button onclick="searchArticle()">Search</button>
+    </div>
+
+    <div id="displayResults">
+        <p>Display search results</p>
+    </div>
+
+    <script>
+        function searchArticle() {
+            let input = document.getElementById('searchTerm').value;
+            alert("Searching for: " + input);
+        }
+    </script>
 </body>
 </html>
