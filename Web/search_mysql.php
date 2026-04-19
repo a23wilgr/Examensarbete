@@ -12,10 +12,10 @@
         $searchTerm = $_GET['searchTerm'];
         
         /*LIKE-sökning*/
-        $getSearchTerm = "SELECT * FROM articles WHERE title LIKE :searchTerm OR text LIKE :searchTerm";
+        //$getSearchTerm = "SELECT * FROM articles WHERE title LIKE :searchTerm OR text LIKE :searchTerm";
 
         /*Fulltext-sökning*/
-        //$getSearchTerm = "SELECT * FROM articles WHERE MATCH(title, text) AGAINST(:searchTerm IN BOOLEAN MODE)";
+        $getSearchTerm = "SELECT * FROM articles WHERE MATCH(title, text) AGAINST(:searchTerm IN BOOLEAN MODE)";
 
         $stmt = $pdo->prepare($getSearchTerm);
 

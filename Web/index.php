@@ -16,8 +16,9 @@
 
     <div id="displayResults">
         <?php
+        
+            //Från search_mysql.php
             session_start();
-
             if (isset($_SESSION['results'])) {
 
                 $results = $_SESSION['results'];

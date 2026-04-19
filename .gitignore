@@ -19,7 +19,6 @@ node_modules/
 .env
 
 # Database files
-*.sql
 *.db
 
 # Large datasets (om du inte vill ladda upp dem)
