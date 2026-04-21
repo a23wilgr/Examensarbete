@@ -1,11 +1,11 @@
 <?php
-    $servername = "localhost";
+    $host = "localhost";
     $username = "root";
     $password = "root123";
-    $db_name = "articles_32k_mysql";
+    $dbname = "articles_32k_mysql";
 
     try {
-        $pdo = new PDO('mysql:host='.$servername.';dbname='.$db_name, $username, $password);
+        $pdo = new PDO('mysql:host='.$host.';dbname='.$dbname, $username, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         //echo "Connection OK";
 
@@ -34,6 +34,7 @@
         exit;
 
     }
+    
     catch(PDOException $error) {
         echo "Connection failed: " . $error->getMessage();
     }

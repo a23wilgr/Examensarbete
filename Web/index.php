@@ -9,7 +9,8 @@
 <body>
     <h1>Article search</h1>
 
-    <form action="search_mysql.php" method="GET">
+    //<form action="search_mysql.php" method="GET">
+    <form action="search_postgresql.php" method="GET">
         <input type="text" name="searchTerm" placeholder="Search...">
         <button type="submit">Search</button>
     </form>
