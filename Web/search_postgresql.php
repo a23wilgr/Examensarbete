@@ -1,6 +1,8 @@
 <?php
     $host = "localhost";
-    $dbname = "articles_32k_postgre";
+    //$dbname = "articles_32k_postgre";
+    //$dbname = "articles_64k_postgre";
+    $dbname = "articles_96k_postgre";
     $user = "postgres";
     $password = "apollo";
     
@@ -12,7 +14,10 @@
         $searchTerm = $_GET['searchTerm'];
 
         //LIKE-sökning
-        $getSearchTerm = "SELECT * FROM articles WHERE title ILIKE :searchTerm OR text LIKE :searchTerm";
+       // $getSearchTerm = "SELECT * FROM articles WHERE title ILIKE :searchTerm OR text LIKE :searchTerm";
+
+        $getSearchTerm = "SELECT * FROM articles 
+        WHERE to_tsvector('english', title || ' ' || text) @@ plainto_tsquery('english', :searchTerm)"; 
 
         $stmt = $pdo->prepare($getSearchTerm);
 
