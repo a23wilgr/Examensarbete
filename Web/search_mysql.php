@@ -1,43 +1,72 @@
 <?php
     $host = "localhost";
-    $username = "root";
+    $user = "root";
     $password = "root123";
     //$dbname = "articles_32k_mysql";
     //$dbname = "articles_64k_mysql";
     $dbname = "articles_96k_mysql";
 
+    $results = "";
+
     try {
-        $pdo = new PDO('mysql:host='.$host.';dbname='.$dbname, $username, $password);
+        $pdo = new PDO('mysql:host='.$host.';dbname='.$dbname, $user, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        //echo "Connection OK";
 
-        $searchTerm = $_GET['searchTerm'];
-        
-        /*LIKE-sökning*/
-        //$getSearchTerm = "SELECT * FROM articles WHERE title LIKE :searchTerm OR text LIKE :searchTerm";
+        if (isset($_GET['searchTerm'])){
 
-        /*Fulltext-sökning*/
-        $getSearchTerm = "SELECT * FROM articles WHERE MATCH(title, text) AGAINST(:searchTerm IN BOOLEAN MODE)";
+            $searchTerm = $_GET['searchTerm'];
+            
+            /*LIKE-sökning*/
+            //$getSearchTerm = "SELECT * FROM articles WHERE title LIKE :searchTerm OR text LIKE :searchTerm";
 
-        $stmt = $pdo->prepare($getSearchTerm);
+            /*Fulltext-sökning*/
+            $getSearchTerm = "SELECT * FROM articles WHERE MATCH(title, text) AGAINST(:searchTerm IN BOOLEAN MODE)";
 
-        $searchTerm = $searchTerm . "%";
+            $stmt = $pdo->prepare($getSearchTerm);
 
-        $stmt->bindParam(':searchTerm', $searchTerm);
-        $stmt->execute();
+            $searchTerm = $searchTerm . "%";
 
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->bindParam(':searchTerm', $searchTerm);
+            $stmt->execute();
 
-        /*Skickar vidare resultaten till index.php - sidan med sökruta samt resultat*/
-        session_start();
-
-        $_SESSION['results'] = $results;
-        header("Location: index.php");
-        exit;
-
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
     }
     
     catch(PDOException $error) {
         echo "Connection failed: " . $error->getMessage();
     }
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="stylesheet.css">
+    <title>Examensarbete</title>
+</head>
+<body>
+    <h1>Article search - MySQL</h1>
+
+    <form method="GET">
+        <input type="text" name="searchTerm" placeholder="Search...">
+        <button type="submit">Search</button>
+    </form>
+
+    <div id="displayResults">
+        <?php
+        
+            if ($results) {
+                foreach ($results as $row) {
+                    echo "<h3>" . $row['title'] . "</h3>";
+                    echo "<p>" . $row['text'] . "</p>";
+                }
+            } else {
+                echo "no results found"; 
+            }
+        ?>
+    </div>
+
+</body>
+</html>
