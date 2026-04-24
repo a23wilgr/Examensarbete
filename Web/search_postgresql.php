@@ -21,8 +21,8 @@
             //$getSearchTerm = "SELECT * FROM articles WHERE title ILIKE :searchTerm OR text ILIKE :searchTerm";
 
             //Fulltextsökning
-            // $getSearchTerm = "SELECT * FROM articles 
-            WHERE to_tsvector('english', title || ' ' || text) @@ plainto_tsquery('english', :searchTerm)"; 
+            $getSearchTerm = "SELECT * FROM articles 
+            WHERE search_vector @@ plainto_tsquery('english', :searchTerm)"; 
 
             $stmt = $pdo->prepare($getSearchTerm);
 
