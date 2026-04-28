@@ -2,8 +2,6 @@
     $host = "localhost";
     $user = "root";
     $password = "root123";
-    //$dbname = "articles_32k_mysql";
-    //$dbname = "articles_64k_mysql";
     $dbname = "articles_96k_mysql";
 
     $results = "";
@@ -48,22 +46,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="stylesheet.css">
+    <link rel="stylesheet" href="stylesheet.css?">
     <title>Examensarbete</title>
 </head>
 <body>
     <h1>Article search - MySQL</h1>
 
-    <form method="GET">
+    <div id='searchBox'>
+        <form method="GET">
         <input type="text" name="searchTerm" placeholder="Search...">
         <button type="submit">Search</button>
     </form>
+    </div>
 
     <div id="displayResults">
         <?php
 
             if ($results) {
                 foreach ($results as $row) {
+                    echo "<div class='articleDiv'>";
                     echo "<h3>" .
                     htmlspecialchars($row['title']) .
                     " - " .
@@ -71,21 +72,24 @@
                     htmlspecialchars($row['source']) .
                     "</a>" .
                     "</h3>";
-                    echo "<p>" . htmlspecialchars(substr($row['text'], 0, 500)) . "...</p>";
+                    // echo "<p>" . htmlspecialchars(substr($row['text'], 0, 500)) . "...</p>";
+                    echo "<p>" . $row['text'] . "</p>";
+                    echo "</div>";
                 }
             } else {
-                echo "no results found"; 
+                echo "No results found"; 
             }
 
             echo "<br>";
+            echo "<div id='pagination'>";
+                if(isset($searchTerm)){
+                    if ($page > 1) {
+                        echo "<a class='pageButton' href='?searchTerm=" . urlencode($searchTerm) . "&page=" . ($page - 1) . "'>Previous</a> ";
+                    }
 
-            if(isset($searchTerm)){
-                if ($page > 1) {
-                    echo "<a href='?searchTerm=" . urlencode($searchTerm) . "&page=" . ($page - 1) . "'>Previous</a> ";
+                    echo "<a class='pageButton' href='?searchTerm=" . urlencode($searchTerm) . "&page=" . ($page + 1) . "'>Next</a>";
                 }
-
-                echo "<a href='?searchTerm=" . urlencode($searchTerm) . "&page=" . ($page + 1) . "'>Next</a>";
-            }
+            echo "</div>";
         ?>
     </div>
 

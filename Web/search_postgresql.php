@@ -2,9 +2,7 @@
     $host = "localhost";
     $user = "postgres";
     $password = "apollo";
-    $dbname = "articles_32k_postgre";
-    //$dbname = "articles_64k_postgre";
-    //$dbname = "articles_96k_postgre";
+    $dbname = "articles_96k_postgre";
 
     $results = "";
     
@@ -23,13 +21,13 @@
             $searchTerm = $_GET['searchTerm'];
 
             //LIKE-sökning
-            // $getSearchTerm = "SELECT title, text, url, source FROM articles WHERE title ILIKE :searchTerm OR text ILIKE :searchTerm 
-            // LIMIT $articlePerPage OFFSET $offset";
-            // $searchTerm = "%" . $searchTerm . "%";
+            $getSearchTerm = "SELECT title, text, url, source FROM articles WHERE title ILIKE :searchTerm OR text ILIKE :searchTerm 
+            LIMIT $articlePerPage OFFSET $offset";
+            $searchTerm = "%" . $searchTerm . "%";
 
             //Fulltextsökning
-            $getSearchTerm = "SELECT title, text, url, source FROM articles 
-            WHERE search_vector @@ plainto_tsquery('english', :searchTerm) LIMIT $articlePerPage OFFSET $offset"; 
+            // $getSearchTerm = "SELECT title, text, url, source FROM articles 
+            // WHERE search_vector @@ plainto_tsquery('english', :searchTerm) LIMIT $articlePerPage OFFSET $offset"; 
 
             $stmt = $pdo->prepare($getSearchTerm);
             $stmt->bindParam(':searchTerm', $searchTerm);
@@ -49,22 +47,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="stylesheet.css">
+    <link rel="stylesheet" href="stylesheet.css?">
     <title>Examensarbete</title>
 </head>
 <body>
     <h1>Article search - PostgreSQL</h1>
 
-    <form method="GET">
+    <div id='searchBox'>
+        <form method="GET">
         <input type="text" name="searchTerm" placeholder="Search...">
         <button type="submit">Search</button>
     </form>
+    </div>
 
     <div id="displayResults">
         <?php
 
             if ($results) {
                 foreach ($results as $row) {
+                    echo "<div class='articleDiv'>";
                     echo "<h3>" .
                     htmlspecialchars($row['title']) .
                     " - " .
@@ -72,20 +73,24 @@
                     htmlspecialchars($row['source']) .
                     "</a>" .
                     "</h3>";
-                    echo "<p>" . htmlspecialchars(substr($row['text'], 0, 500)) . "...</p>";
+                    // echo "<p>" . htmlspecialchars(substr($row['text'], 0, 500)) . "...</p>";
+                    echo "<p>" . $row['text'] . "</p>";
+                    echo "</div>";
                 }
             } else {
-                echo "no results found"; 
+                echo "No results found"; 
             }
 
             echo "<br>";
+            echo "<div id='pagination'>";
+                if(isset($searchTerm)){
+                    if ($page > 1) {
+                        echo "<a class='pageButton' href='?searchTerm=" . urlencode($searchTerm) . "&page=" . ($page - 1) . "'>Previous</a> ";
+                    }
 
-            if(isset($searchTerm)){
-                if ($page > 1) {
-                    echo "<a href='?searchTerm=" . urlencode($searchTerm) . "&page=" . ($page - 1) . "'>Previous</a> ";
+                    echo "<a class='pageButton' href='?searchTerm=" . urlencode($searchTerm) . "&page=" . ($page + 1) . "'>Next</a>";
                 }
-                echo "<a href='?searchTerm=" . urlencode($searchTerm) . "&page=" . ($page + 1) . "'>Next</a>";
-            }
+            echo "</div>";
         ?>
     </div>
 

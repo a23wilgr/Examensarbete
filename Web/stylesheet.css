@@ -1,13 +1,52 @@
-h1, #searchBox{
+h1 {
+    text-align: center;
+}
+
+#searchBox {
     display: flex;
     justify-content: center;
+    margin-bottom: 20px;
 }
 
-button {
-    margin-left: 1rem;
+#searchBox form {
+    display: flex;
+    gap: 10px;
 }
 
-#displayResults p{
-    margin-left: 1rem;
-    margin-right: 1rem;
+#displayResults {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.articleDiv {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.articleDiv h3 {
+    margin-top: 0;
+}
+
+.articleDiv a {
+    font-size: 0.9em;
+    color: #0066cc;
+}
+
+#pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 30px 0;
+}
+
+.pageButton {
+    padding: 10px 18px;
+    background-color: #6c6c6c;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
 }
