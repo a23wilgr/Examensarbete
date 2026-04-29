@@ -11,21 +11,26 @@
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         //echo "Connection OK";
 
+        /*Pagination  - vilken sida användaren är på. För att minska mängden data som ska renderas*/
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
+        /*Antal artiklar som visas per sida*/
         $articlePerPage = 50;
+        //$articlePerPage = 150;
+        //$articlePerPage = 300;
+        
         $offset = ($page - 1) * $articlePerPage;
 
         if (isset($_GET['searchTerm'])){
 
             $searchTerm = $_GET['searchTerm'];
 
-            //LIKE-sökning
+            /*LIKE-SÖKNING*/
             $getSearchTerm = "SELECT title, text, url, source FROM articles WHERE title ILIKE :searchTerm OR text ILIKE :searchTerm 
             LIMIT $articlePerPage OFFSET $offset";
             $searchTerm = "%" . $searchTerm . "%";
 
-            //Fulltextsökning
+            /*FULLTEXT-SÖKNING*/
             // $getSearchTerm = "SELECT title, text, url, source FROM articles 
             // WHERE search_vector @@ plainto_tsquery('english', :searchTerm) LIMIT $articlePerPage OFFSET $offset"; 
 
@@ -62,7 +67,6 @@
 
     <div id="displayResults">
         <?php
-
             if ($results) {
                 foreach ($results as $row) {
                     echo "<div class='articleDiv'>";
@@ -73,8 +77,9 @@
                     htmlspecialchars($row['source']) .
                     "</a>" .
                     "</h3>";
-                    // echo "<p>" . htmlspecialchars(substr($row['text'], 0, 500)) . "...</p>";
-                    echo "<p>" . $row['text'] . "</p>";
+
+                    /*Visar endast de första 500 tecken av artiklarna*/
+                    echo "<p>" . htmlspecialchars(substr($row['text'], 0, 500)) . "...</p>";
                     echo "</div>";
                 }
             } else {

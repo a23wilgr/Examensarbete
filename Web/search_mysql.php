@@ -10,9 +10,14 @@
         $pdo = new PDO('mysql:host='.$host.';dbname='.$dbname, $user, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+        /*Pagination  - vilken sida användaren är på. För att minska mängden data som ska renderas*/
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
+        /*Antal artiklar som visas per sida*/
         $articlePerPage = 50;
+        //$articlePerPage = 150;
+        //$articlePerPage = 300;
+
         $offset = ($page - 1) * $articlePerPage;
 
         if (isset($_GET['searchTerm'])){
@@ -20,11 +25,11 @@
             
             $searchTerm = $_GET['searchTerm'];
             
-            /*LIKE-sökning*/
+            /*LIKE-SÖKNING*/
             // $getSearchTerm = "SELECT title, text, url, source FROM articles WHERE title LIKE :searchTerm OR text LIKE :searchTerm LIMIT $articlePerPage OFFSET $offset";
             // $searchTerm = "%" . $searchTerm . "%";
 
-            /*Fulltext-sökning*/
+            /*FULLTEXT-SÖKNING*/
             $getSearchTerm = "SELECT title, text, url, source  FROM articles 
             WHERE MATCH(title, text) AGAINST(:searchTerm IN NATURAL LANGUAGE MODE)
             LIMIT $articlePerPage OFFSET $offset";
@@ -72,8 +77,8 @@
                     htmlspecialchars($row['source']) .
                     "</a>" .
                     "</h3>";
-                    // echo "<p>" . htmlspecialchars(substr($row['text'], 0, 500)) . "...</p>";
-                    echo "<p>" . $row['text'] . "</p>";
+                    /*Visar endast de första 500 tecken av artiklarna*/
+                    echo "<p>" . htmlspecialchars(substr($row['text'], 0, 500)) . "...</p>";
                     echo "</div>";
                 }
             } else {
